@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Em Foco - Complicações</title>
+    <style>
+        :root {
+            --primary: #00796b;
+            --primary-light: #b2dfdb;
+            --danger: #d32f2f;
+            --danger-light: #ffcdd2;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border-color: #eaeded;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: var(--card-bg);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            margin-left: 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .alert-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 4px;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .card-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        /* Charts */
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .donut-chart-gender {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0% 71.5%, var(--border-color) 71.5% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .donut-chart-macro {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: conic-gradient(var(--danger) 0% 92.1%, var(--danger-light) 92.1% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .donut-inner {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--card-bg);
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        /* Section Titles */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            margin-top: 50px;
+        }
+
+        /* Horizontal Tabs (Agudas) */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background: #fdfdfd;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-top: 15px;
+        }
+
+        /* Vertical Tabs (Microvasculares) */
+        .v-tabs-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .v-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 200px;
+        }
+
+        .v-tab-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+
+        .v-tab-btn.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .v-tab-content {
+            flex-grow: 1;
+            background: #2a2e35;
+            color: white;
+            border-radius: 12px;
+            padding: 40px;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .v-tab-content.active {
+            display: block;
+        }
+
+        .impact-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border-left: 4px solid var(--danger);
+        }
+
+        /* Prevenção Section */
+        .prev-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        .factor-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .pilar-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .v-tabs-container { flex-direction: column; }
+            .prev-grid { grid-template-columns: 1fr; }
+            .two-cols { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">🩸 Diabetes Em Foco</div>
+        <div class="nav-links">
+            <a href="#">Visão Geral</a>
+            <a href="#agudas">Agudas</a>
+            <a href="#cronicas">Crônicas</a>
+            <a href="#prevencao">Prevenção</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Entendendo as<br>Complicações da Diabetes<br>Tipo 2</h1>
+        <p class="subtitle">O diabetes tipo 2 afeta o funcionamento de quase todos os órgãos do corpo a longo prazo. Esta seção interativa foi desenhada para ilustrar como o descontrole dos níveis de açúcar no sangue (glicose) resulta em complicações sérias. Navegue pelos dados reais de estudos brasileiros e compreenda a urgência da prevenção.</p>
+
+        <div class="alert-box">
+            <span style="font-size: 1.5rem;">⚠️</span>
+            Um estudo em Unidades de Saúde da Família (Recife) revelou que <strong>58,9%</strong> dos pacientes diabéticos já apresentavam pelo menos uma complicação crônica.
+        </div>
+
+        <div class="card chart-container">
+            <h2 class="card-title">Prevalência de Complicações por Gênero</h2>
+            <p class="card-subtitle">Dados baseados em 1.374 registros do Programa Saúde da Família.</p>
+            
+            <div class="donut-chart-gender">
+                <div class="donut-inner"></div>
+            </div>
+            
+            <div class="legend">
+                <span><div class="dot" style="background: var(--primary);"></div> Mulheres (71.5%)</span>
+                <span><div class="dot" style="background: var(--border-color);"></div> Homens (29.5%)</span>
+            </div>
+        </div>
+
+        <h2 id="agudas" class="section-header">⚡ Complicações Agudas</h2>
+        <p class="subtitle">Esta seção detalha os eventos críticos que aparecem de forma rápida e exigem atenção médica imediata. Entender a diferença entre a falta e o excesso de glicose é vital. Clique nas abas abaixo para explorar os sintomas e causas de cada emergência.</p>
+
+        <div class="card" style="padding: 20px;">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="openHMenu(event, 'hipo')">Hipoglicemia</button>
+                <button class="tab-btn" onclick="openHMenu(event, 'hiper')">Hiperglicemia</button>
+                <button class="tab-btn" onclick="openHMenu(event, 'ceto')">Cetoacidose & Coma</button>
+            </div>
+
+            <div id="hipo" class="tab-content h-tab active">
+                <h3>Hipoglicemia</h3>
+                <p>Ocorre quando o açúcar no sangue cai para níveis muito baixos. É uma resposta rápida do corpo à falta de energia.</p>
+                <div class="two-cols">
+                    <div>
+                        <h4 style="color: var(--text-muted); margin-bottom: 10px;">Causas Comuns</h4>
+                        <ul style="margin-left: 20px; font-size: 0.95rem;">
+                            <li>Doses excessivas de insulina</li>
+                            <li>Exercícios muito intensos</li>
+                            <li>Falta de alimentação/pular refeições</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--text-muted); margin-bottom: 10px;">Sintomas Imediatos</h4>
+                        <ul style="margin-left: 20px; font-size: 0.95rem;">
+                            <li>Suor excessivo e tremores</li>
+                            <li>Irritabilidade e dor de cabeça</li>
+                            <li>Visão turva e, em casos graves, desmaios</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hiper" class="tab-content h-tab">
+                <h3>Hiperglicemia</h3>
+                <p>O aumento excessivo do açúcar no sangue. A hiperglicemia prolongada é a principal causa das complicações crônicas graves.</p>
+                <div class="two-cols">
+                    <div>
+                        <h4 style="color: var(--text-muted); margin-bottom: 10px;">Causas Comuns</h4>
+                        <ul style="margin-left: 20px; font-size: 0.95rem;">
+                            <li>Esquecimento da medicação</li>
+                            <li>Presença de infecções</li>
+                            <li>Consumo excessivo de doces sem ajuste do tratamento</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--text-muted); margin-bottom: 10px;">Impacto</h4>
+                        <p style="font-size: 0.95rem;">Embora possa não causar desmaios imediatos como a hipoglicemia, o sangue espesso e doce atua de forma destrutiva nos vasos sanguíneos ao longo do tempo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ceto" class="tab-content h-tab">
+                <h3>Cetoacidose Diabética & Coma Hiperosmolar</h3>
+                <p>Duas emergências médicas graves associadas a níveis extremamente altos de glicose, necessitando de intervenção hospitalar rápida.</p>
+                <div class="two-cols">
+                    <div>
+                        <h4 style="color: var(--text-muted); margin-bottom: 10px;">Cetoacidose Diabética</h4>
+                        <p style="font-size: 0.95rem; margin-bottom: 5px;">Causa acidez no sangue extrema.</p>
+                        <ul style="margin-left: 20px; font-size: 0.9rem;">
+                            <li>Desidratação profunda</li>
+                            <li>Hálito com cheiro de acetona</li>
+                            <li>Respiração profunda e letargia</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--text-muted); margin-bottom: 10px;">Coma Hiperosmolar</h4>
+                        <p style="font-size: 0.95rem;">Ocorre devido à concentração absurda de açúcar no sangue, levando a desidratação severa do cérebro e outros órgãos vitais. Totalmente reversível se tratado a tempo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="cronicas" class="section-header">⏳ Complicações Crônicas (Longo Prazo)</h2>
+        <p class="subtitle">Nesta seção, exploramos como o diabetes degrada os tecidos ao longo dos anos. Os problemas crônicos são classificados pelo tamanho dos vasos sanguíneos afetados: <strong>Macrovasculares</strong> (grandes artérias) e <strong>Microvasculares / Nervos</strong> (pequenos capilares). Utilize o mapa e o gráfico para compreender essa distribuição sistêmica.</p>
+
+        <div class="card chart-container">
+            <h2 class="card-title">Macrovasculares (Grandes Vasos)</h2>
+            <p class="card-subtitle">Representam a vasta maioria dos problemas crônicos. A mortalidade cardiovascular chega a ser de 2 a 8 vezes maior.</p>
+            
+            <div class="donut-chart-macro">
+                <div class="donut-inner"></div>
+            </div>
+            
+            <div class="legend" style="flex-direction: column; align-items: center; gap: 5px;">
+                <span><div class="dot" style="background: var(--danger);"></div> Doença Vascular Periférica</span>
+                <span><div class="dot" style="background: var(--danger-light);"></div> Doenças Cardiovasculares/Cerebrovasculares</span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px;">Foco do estudo de Recife: Doença Vascular Periférica domina as complicações macrovasculares (92,1%).</p>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title" style="text-align: left;">Mapa de Impacto Sistêmico (Microvasculares & Nervos)</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">SELECIONE UMA ÁREA:</p>
+            
+            <div class="v-tabs-container">
+                <div class="v-tabs">
+                    <button class="v-tab-btn active" onclick="openVMenu(event, 'retinopatia')">👁️ Retinopatia</button>
+                    <button class="v-tab-btn" onclick="openVMenu(event, 'nefropatia')">🩸 Nefropatia</button>
+                    <button class="v-tab-btn" onclick="openVMenu(event, 'neuropatia')">⚡ Neuropatia</button>
+                    <button class="v-tab-btn" onclick="openVMenu(event, 'pe')">🦶 Pé Diabético</button>
+                </div>
+
+                <div id="retinopatia" class="v-tab-content active">
+                    <h2>Retinopatia Diabética</h2>
+                    <p style="margin-top: 10px; font-size: 1.1rem;">Danos aos vasos sanguíneos dos olhos que causam grave deterioração da visão.</p>
+                    <div class="impact-box">
+                        <strong style="color: var(--danger-light); font-size: 0.8rem; letter-spacing: 1px;">IMPACTO GLOBAL</strong>
+                        <p style="margin-top: 5px;">É a causa mais comum de cegueira no mundo ocidental.</p>
+                    </div>
+                </div>
+
+                <div id="nefropatia" class="v-tab-content">
+                    <h2>Nefropatia Diabética</h2>
+                    <p style="margin-top: 10px; font-size: 1.1rem;">Danos crônicos na estrutura dos rins devido à hiperglicemia contínua e hipertensão associada.</p>
+                    <div class="impact-box">
+                        <strong style="color: var(--danger-light); font-size: 0.8rem; letter-spacing: 1px;">IMPACTO GLOBAL</strong>
+                        <p style="margin-top: 5px;">Pode resultar em insuficiência renal severa necessitando de diálise.</p>
+                    </div>
+                </div>
+
+                <div id="neuropatia" class="v-tab-content">
+                    <h2>Neuropatia Diabética</h2>
+                    <p style="margin-top: 10px; font-size: 1.1rem;">Danos aos nervos causando distúrbios de sensibilidade, formigamento, atrofia muscular e dor intensa (periférica). Também afeta o controle de órgãos internos (autonômica).</p>
+                    <div class="impact-box">
+                        <strong style="color: var(--danger-light); font-size: 0.8rem; letter-spacing: 1px;">IMPACTO GLOBAL</strong>
+                        <p style="margin-top: 5px;">Causa incontinência urinária, diarreia e dificuldade para caminhar.</p>
+                    </div>
+                </div>
+
+                <div id="pe" class="v-tab-content">
+                    <h2>Pé Diabético</h2>
+                    <p style="margin-top: 10px; font-size: 1.1rem;">Uma perigosa combinação de problemas circulatórios (má irrigação) e neurológicos (perda de sensibilidade).</p>
+                    <div class="impact-box">
+                        <strong style="color: var(--danger-light); font-size: 0.8rem; letter-spacing: 1px;">IMPACTO GLOBAL</strong>
+                        <p style="margin-top: 5px;">Causa úlceras e feridas que podem sofrer infecções graves, levando à gangrena e amputação.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="prevencao" class="section-header" style="background: var(--primary); color: white; padding: 20px; border-radius: 8px 8px 0 0; margin-bottom: 0;">🛡️ Prevenção e Fatores de Risco</h2>
+        
+        <div class="card" style="border-radius: 0 0 8px 8px; border-top: none;">
+            <div class="prev-grid">
+                <div>
+                    <p style="margin-bottom: 20px;">Apesar do quadro clínico exigir atenção, a diretriz médica é clara: é plenamente possível evitar ou retardar a maioria desses problemas. Descubra aqui as ações preventivas e os riscos associados.</p>
+                    
+                    <h4 style="color: var(--text-muted); margin-bottom: 15px; font-size: 0.9rem; letter-spacing: 1px;">FATORES QUE AGRAVAM O RISCO:</h4>
+                    
+                    <div class="factor-card">
+                        <div style="font-size: 1.5rem;">👴</div>
+                        <div>
+                            <h4 style="color: var(--danger);">Idade (> 66 anos)</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Aumenta significativamente a probabilidade de complicações macrovasculares.</p>
+                        </div>
+                    </div>
+
+                    <div class="factor-card">
+                        <div style="font-size: 1.5rem;">🚬</div>
+                        <div>
+                            <h4 style="color: var(--danger);">Tabagismo</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Fortemente associado ao surgimento acelerado de complicações microvasculares (rins e olhos).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 20px; text-align: center;">Pilares do Controle Clínico</h3>
+                    
+                    <div class="pilar-card">
+                        <div class="icon-circle">💊</div>
+                        <div>
+                            <h4 style="margin-bottom: 5px;">Medicação Correta</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Aderência estrita à insulina ou antidiabéticos orais prescritos, evitando hiper/hipoglicemia.</p>
+                        </div>
+                    </div>
+
+                    <div class="pilar-card">
+                        <div class="icon-circle">🏃</div>
+                        <div>
+                            <h4 style="margin-bottom: 5px;">Exercício Físico</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Aumenta a sensibilidade à insulina e protege a saúde macrovascular (coração e artérias).</p>
+                        </div>
+                    </div>
+
+                    <div class="pilar-card">
+                        <div class="icon-circle">⚖️</div>
+                        <div>
+                            <h4 style="margin-bottom: 5px;">Controle do Peso</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Reduz a sobrecarga metabólica e inflamatória, facilitando o controle glicêmico global.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; font-size: 0.8rem; color: #999;">
+                Dashboard Interativo desenvolvido para exploração de dados. Referências baseadas no estudo das Unidades de Saúde da Família (Recife, Brasil) e literatura médica padronizada.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função para as Abas Horizontais (Agudas)
+        function openHMenu(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("h-tab");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Função para as Abas Verticais (Microvasculares)
+        function openVMenu(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("v-tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("v-tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
